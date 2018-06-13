@@ -55,7 +55,6 @@ void loop() {
                         AxisValores[i] = analogRead(AxisPines[i]);
                         delay(30);
                 }
-
                 Serial.print("X: ");
                 Serial.print(AxisValores[0]);
                 Serial.print(" Y: ");

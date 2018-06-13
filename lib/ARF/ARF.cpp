@@ -10,11 +10,14 @@ ARF::ARF(){
 
 // A continuación se espera la inicialización del pin y el modo.
 void ARF::setReciver(int Rx_Pin){
+        pinMode(Rx_Pin, INPUT);
         vw_set_rx_pin(Rx_Pin);
         vw_setup(2000); //2000 bits por segundo
 }
 
 void ARF::setTransmiter(int Tx_Pin) {
+
+        pinMode(Tx_Pin, INPUT);
         vw_set_tx_pin(Tx_Pin);
         vw_setup(2000); //2000 bits por segundo
 }
