@@ -48,7 +48,7 @@ void loop() {
                 motor.writeMotor('A',ValRecivido[0]);
                 motor.writeMotor('B',ValRecivido[1]);
 
-                digitalWrite(Buzzer_Pin, ValRecivido[2]);
+                digitalWrite(Buzzer_Pin, map((ValRecivido[2]), 0, 1023, 1023, 0));
         }
         if(!isReciver) {
                 for(int i=0; i<3; i++) {
