@@ -17,7 +17,7 @@ void ARF::setReciver(int Rx_Pin){
 
 void ARF::setTransmiter(int Tx_Pin) {
 
-        pinMode(Tx_Pin, INPUT);
+        pinMode(Tx_Pin, OUTPUT);
         vw_set_tx_pin(Tx_Pin);
         vw_setup(2000); //2000 bits por segundo
 }
