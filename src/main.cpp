@@ -9,7 +9,7 @@ int Tx_Pin = A5;
 
 int Buzzer_Pin = 2;
 
-int AxisPines[3] = {A0, A1, A2};
+int AxisPines[3] = {A1, A0, A2};
 int AxisValores[3];
 
 int* ValRecivido;
@@ -24,6 +24,14 @@ ARF ARF;
 Autuino motor(Pin_Motor_A1, Pin_Motor_A2, Pin_Motor_B1, Pin_Motor_B2);
 
 void setup() {
+
+        for(int i=0; i<2; i++) {
+                pinMode(AxisPines[i], INPUT);
+                delay(30);
+        }
+        pinMode(AxisPines[2], INPUT_PULLUP);
+
+        Serial.begin(9600);
 
         if(isReciver) {
                 ARF.setReciver(Rx_Pin);
@@ -43,10 +51,18 @@ void loop() {
                 digitalWrite(Buzzer_Pin, ValRecivido[2]);
         }
         if(!isReciver) {
-                for(int i=2; i>=0; i--) {
+                for(int i=0; i<3; i++) {
                         AxisValores[i] = analogRead(AxisPines[i]);
                         delay(30);
                 }
+
+                Serial.print("X: ");
+                Serial.print(AxisValores[0]);
+                Serial.print(" Y: ");
+                Serial.print(AxisValores[1]);
+                Serial.print(" K: ");
+                Serial.print(AxisValores[2]);
+                Serial.println();
 
                 ARF.write(AxisValores[0],AxisValores[1],AxisValores[2]);
                 delay(300);
