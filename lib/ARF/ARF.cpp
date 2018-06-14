@@ -63,13 +63,13 @@ void ARF::write(int AxisX, int AxisY, int AxisK){
                 , AxisK
         };
 
-        if(vw_wait_rx_max(500)) {
-                vw_send((uint8_t *)ValorAxisMap, strlen(ValorAxisMap));
+        vw_send((uint8_t *)ValorAxisMap, strlen(ValorAxisMap));
 
-                digitalWrite(_Led_ES, HIGH);
+        if(vx_tx_active()) {digitalWrite(_Led_ES, HIGH);}
 
-                vw_wait_tx();
-        }
+        vw_wait_tx();
+
+        delay(300);
 
         digitalWrite(_Led_ES, LOW);
 
@@ -81,27 +81,35 @@ int* ARF::read(){
         uint8_t buf[VW_MAX_MESSAGE_LEN];
         uint8_t buflen = VW_MAX_MESSAGE_LEN;
 
-        if (vw_get_message(buf, &buflen)) {
-                // Comprobando la integridad del mensaje
+        vw_rx_start();
 
-                /*
-                   Se recive en uint8 (1 byte por uint8, 2 unit8 por int).
-                   Realizamos la conversión a
-                   uint 16 (2 byte por uint16, 1 unit16 por int)
-                   desplazando un byte y concatenando el segundo del paquete:
-                 */
+        if(vw_have_message()) {
+                digitalWrite(_Led_ES, HIGH);
+                if (vw_get_message(buf, &buflen)) {
+                        // Comprobando la integridad del mensaje
 
-                if (buflen == 6)  {
-                        //Si el mensaje se recibió en su totalidad
+                        /*
+                           Se recive en uint8 (1 byte por uint8, 2 unit8 por int).
+                           Realizamos la conversión a
+                           uint 16 (2 byte por uint16, 1 unit16 por int)
+                           desplazando un byte y concatenando el segundo del paquete:
+                         */
 
-                        R_array[0] = (buf[0]<<8) +  buf[1]; //Axis x
-                        R_array[1] = (buf[2]<<8) +  buf[3]; //Axis Y
-                        R_array[3] = (buf[4]<<8) +  buf[5]; //Axis K
+                        if (buflen == 6)  {
+                                //Si el mensaje se recibió en su totalidad
 
-                        //Se envía como puntero a array para enviar todos
-                        //los valores como un solo int
-                        return (int*)R_array;
+                                R_array[0] = (buf[0]<<8) +  buf[1];//Axis x
+                                R_array[1] = (buf[2]<<8) +  buf[3];//Axis Y
+                                R_array[3] = (buf[4]<<8) +  buf[5];//Axis K
+
+                                //Se envía como puntero a array para enviar todos
+                                //los valores como un solo int
+                                return (int*)R_array;
+                        }
                 }
+        }
+        else{
+                digitalWrite(_Led_ES, LOW);
         }
 }
 //************************Fin codigo*************************//

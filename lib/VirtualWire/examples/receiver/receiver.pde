@@ -9,11 +9,7 @@
 // $Id: receiver.pde,v 1.3 2009/03/30 00:07:24 mikem Exp $
 
 #include <VirtualWire.h>
-#undef int
-#undef abs
-#undef double
-#undef float
-#undef round
+
 void setup()
 {
     Serial.begin(9600);	// Debugging only

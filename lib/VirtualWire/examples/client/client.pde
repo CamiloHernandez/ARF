@@ -11,11 +11,7 @@
 // $Id: client.pde,v 1.1 2008/04/20 09:24:17 mikem Exp $
 
 #include <VirtualWire.h>
-#undef int
-#undef abs
-#undef double
-#undef float
-#undef round
+
 void setup()
 {
     Serial.begin(9600);	// Debugging only

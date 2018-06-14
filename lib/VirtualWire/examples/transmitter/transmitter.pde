@@ -9,14 +9,7 @@
 // $Id: transmitter.pde,v 1.3 2009/03/30 00:07:24 mikem Exp $
 
 #include <VirtualWire.h>
-#undef int
-#undef abs
-#undef double
-#undef float
-#undef round
-#include "WProgram.h"
-void setup();
-void loop();
+
 void setup()
 {
     Serial.begin(9600);	  // Debugging only
@@ -37,16 +30,3 @@ void loop()
     digitalWrite(13, false);
     delay(200);
 }
-
-int main(void)
-{
-	init();
-
-	setup();
-    
-	for (;;)
-		loop();
-        
-	return 0;
-}
-
