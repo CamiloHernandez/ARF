@@ -54,7 +54,7 @@ void loop() {
 
                 digitalWrite(Buzzer_Pin, map((ValRecibido[2]), 0, 1023, 1023, 0));
 
-                Serial.print("X: ");
+                Serial.print("RECIVIDO X: ");
                 Serial.print(ValRecibido[0]);
                 Serial.print(" Y: ");
                 Serial.print(ValRecibido[1]);
@@ -68,7 +68,7 @@ void loop() {
                         AxisValores[i] = analogRead(AxisPines[i]);
                         delay(30);
                 }
-                Serial.print("X: ");
+                Serial.print("ENVIADO X: ");
                 Serial.print(AxisValores[0]);
                 Serial.print(" Y: ");
                 Serial.print(AxisValores[1]);

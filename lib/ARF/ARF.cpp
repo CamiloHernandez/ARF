@@ -69,8 +69,6 @@ void ARF::write(int AxisX, int AxisY, int AxisK){
 
         vw_wait_tx();
 
-        delay(300);
-
         digitalWrite(_Led_ES, LOW);
 
 }
