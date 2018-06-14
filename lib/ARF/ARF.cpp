@@ -9,17 +9,25 @@ ARF::ARF(){
 }
 
 // A continuación se espera la inicialización del pin y el modo.
-void ARF::setReciver(int Rx_Pin){
+void ARF::setReciver(int Rx_Pin, int Led_ES){
         pinMode(Rx_Pin, INPUT);
+        pinMode(Led_ES, OUTPUT);
+
         vw_set_rx_pin(Rx_Pin);
         vw_setup(2000); //2000 bits por segundo
+
+        _Led_ES = Led_ES;
 }
 
-void ARF::setTransmiter(int Tx_Pin) {
+void ARF::setTransmiter(int Tx_Pin, int Led_ES) {
 
         pinMode(Tx_Pin, OUTPUT);
+        pinMode(Led_ES, OUTPUT);
+
         vw_set_tx_pin(Tx_Pin);
         vw_setup(2000); //2000 bits por segundo
+
+        _Led_ES = Led_ES;
 }
 
 // Procedemos a enviar el mensaje
@@ -55,8 +63,16 @@ void ARF::write(int AxisX, int AxisY, int AxisK){
                 , AxisK
         };
 
-        vw_send((uint8_t *)ValorAxisMap, strlen(ValorAxisMap));
-        vw_wait_tx();
+        if(vw_wait_rx_max(500)) {
+                vw_send((uint8_t *)ValorAxisMap, strlen(ValorAxisMap));
+
+                digitalWrite(_Led_ES, HIGH);
+
+                vw_wait_tx();
+        }
+
+        digitalWrite(_Led_ES, LOW);
+
 }
 
 int* ARF::read(){

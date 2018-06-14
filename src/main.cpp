@@ -3,16 +3,18 @@
 #include <ARF.h>
 
 bool isReciver = false;
+bool isTrasmitor = true;
 
 int Rx_Pin = A2;
 int Tx_Pin = A5;
 
 int Buzzer_Pin = 2;
+int Led_ES = 13;
 
 int AxisPines[3] = {A1, A0, A2};
 int AxisValores[3];
 
-int* ValRecivido;
+int* ValRecibido;
 
 const int Pin_Motor_A1 = 6;
 const int Pin_Motor_A2 = 5;
@@ -29,28 +31,39 @@ void setup() {
                 pinMode(AxisPines[i], INPUT);
                 delay(30);
         }
+
         pinMode(AxisPines[2], INPUT_PULLUP);
+        pinMode(Led_ES, OUTPUT);
 
         Serial.begin(9600);
 
         if(isReciver) {
-                ARF.setReciver(Rx_Pin);
+                ARF.setReciver(Rx_Pin, Led_ES);
         }
-        if(!isReciver) {
-                ARF.setTransmiter(Tx_Pin);
+        if(isTrasmitor) {
+                ARF.setTransmiter(Tx_Pin, Led_ES);
         }
 
 }
 
 void loop() {
         if(isReciver) {
-                ValRecivido = ARF.read();
-                motor.writeMotor('A',ValRecivido[0]);
-                motor.writeMotor('B',ValRecivido[1]);
+                ValRecibido = ARF.read();
+                motor.writeMotor('A',ValRecibido[0]);
+                motor.writeMotor('B',ValRecibido[1]);
 
-                digitalWrite(Buzzer_Pin, map((ValRecivido[2]), 0, 1023, 1023, 0));
+                digitalWrite(Buzzer_Pin, map((ValRecibido[2]), 0, 1023, 1023, 0));
+
+                Serial.print("X: ");
+                Serial.print(ValRecibido[0]);
+                Serial.print(" Y: ");
+                Serial.print(ValRecibido[1]);
+                Serial.print(" K: ");
+                Serial.print(ValRecibido[2]);
+                Serial.println();
+
         }
-        if(!isReciver) {
+        if(isTrasmitor) {
                 for(int i=0; i<3; i++) {
                         AxisValores[i] = analogRead(AxisPines[i]);
                         delay(30);
