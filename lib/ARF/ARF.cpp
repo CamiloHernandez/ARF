@@ -30,6 +30,13 @@ void ARF::setTransmiter(int Tx_Pin, int Led_ES) {
         _Led_ES = Led_ES;
 }
 
+void ARF::isSerialTalk(bool Talk){
+        _Talk = Talk;
+        if(Talk) {
+                Serial.begin(9600);
+        }
+}
+
 // Procedemos a enviar el mensaje
 void ARF::write(int AxisX, int AxisY, int AxisK){
 
@@ -64,6 +71,16 @@ void ARF::write(int AxisX, int AxisY, int AxisK){
         };
 
         vw_send((uint8_t *)ValorAxisMap, strlen(ValorAxisMap));
+
+        if(_Talk) {
+                Serial.print("ENVIADO X: ");
+                Serial.print(ValorAxisMap[0]);
+                Serial.print(" Y: ");
+                Serial.print(ValorAxisMap[1]);
+                Serial.print(" K: ");
+                Serial.print(ValorAxisMap[2]);
+                Serial.println();
+        }
 
         if(vx_tx_active()) {digitalWrite(_Led_ES, HIGH);}
 
@@ -102,6 +119,17 @@ int* ARF::read(){
 
                                 //Se envía como puntero a array para enviar todos
                                 //los valores como un solo int
+
+                                if(_Talk) {
+                                        Serial.print("RECIVIDO X: ");
+                                        Serial.print(R_array[0]);
+                                        Serial.print(" Y: ");
+                                        Serial.print(R_array[1]);
+                                        Serial.print(" K: ");
+                                        Serial.print(R_array[2]);
+                                        Serial.println();
+                                }
+
                                 return (int*)R_array;
                         }
                 }
